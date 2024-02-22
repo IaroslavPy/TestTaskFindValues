@@ -7,19 +7,21 @@ import java.util.List;
 
 public class FileHandler {
     public static void main(String[] args) {
+        long m = System.currentTimeMillis();
         String filePath = "W:/10m.txt";
         try {
             processFile(filePath);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        System.out.println((double) (System.currentTimeMillis() - m) + " time (millisec) with using ArrayList");
     }
 
     private static void processFile(String filePath) throws IOException {
 
         int bufferSize = 4096;
-        int maxValue = Integer.MIN_VALUE;
-        int minValue = Integer.MAX_VALUE;
+        int maxValue;
+        int minValue;
         double medianValue;
         double meanValue = 0;
         List<Integer> allValues = new ArrayList<>();
@@ -34,14 +36,6 @@ public class FileHandler {
                 String[] values = stringLine.split("\\s+");
                 for (String value : values) {
                     int currentNumber = Integer.parseInt(value);
-
-                    if (currentNumber > maxValue) {
-                        maxValue = currentNumber;
-                    }
-
-                    if (currentNumber < minValue) {
-                        minValue = currentNumber;
-                    }
 
                     if (currentIncreaseSequence.isEmpty() ||
                             currentNumber > currentIncreaseSequence.get(currentIncreaseSequence.size() - 1)) {
@@ -83,6 +77,10 @@ public class FileHandler {
         meanValue = meanValue / allValues.size();
 
         Collections.sort(allValues);
+
+        minValue = allValues.get(0);
+        maxValue = allValues.get(allValues.size() - 1);
+
         if (allValues.size() % 2 == 0) {
             medianValue = 0.5 * (allValues.get(allValues.size() / 2 - 1) + allValues.get(allValues.size() / 2));
         } else {

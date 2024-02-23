@@ -5,16 +5,19 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class FileHandler {
+public class SixValuesFileHandler {
     public static void main(String[] args) {
-        long m = System.currentTimeMillis();
-        String filePath = "W:/10m.txt";
+
+        long startTime = System.currentTimeMillis();
+        String filePath = Constants.ABSOLUTE_FILE_PATH + Constants.FILE_NAME;
+
         try {
             processFile(filePath);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println((double) (System.currentTimeMillis() - m) + " time (millisec) with using ArrayList");
+        System.out.println((double) (System.currentTimeMillis() - startTime) +
+                " - time (milliseconds) with using ArrayList");
     }
 
     private static void processFile(String filePath) throws IOException {
@@ -23,7 +26,8 @@ public class FileHandler {
         int maxValue;
         int minValue;
         double medianValue;
-        double meanValue = 0;
+        double averageValue;
+        long totalValue = 0;
         List<Integer> allValues = new ArrayList<>();
         List<Integer> currentIncreaseSequence = new ArrayList<>();
         List<Integer> currentDecreaseSequence = new ArrayList<>();
@@ -59,8 +63,7 @@ public class FileHandler {
                         currentDecreaseSequence.add(currentNumber);
                     }
 
-                    meanValue = meanValue + currentNumber;
-
+                    totalValue = totalValue + currentNumber;
                     allValues.add(currentNumber);
                 }
             }
@@ -74,24 +77,25 @@ public class FileHandler {
             longestDecreaseSequence = new ArrayList<>(currentDecreaseSequence);
         }
 
-        meanValue = meanValue / allValues.size();
-
         Collections.sort(allValues);
 
         minValue = allValues.get(0);
         maxValue = allValues.get(allValues.size() - 1);
 
         if (allValues.size() % 2 == 0) {
-            medianValue = 0.5 * (allValues.get(allValues.size() / 2 - 1) + allValues.get(allValues.size() / 2));
+            medianValue = 0.5 * (allValues.get(allValues.size() / 2 - 1) +
+                    allValues.get(allValues.size() / 2));
         } else {
             medianValue = allValues.get(allValues.size() / 2);
         }
 
-        System.out.println("Maximum Value: " + maxValue);
-        System.out.println("Minimum Value: " + minValue);
-        System.out.println("Median Value: " + medianValue);
-        System.out.println("Average value: " + meanValue);
-        System.out.println("The longest Increasing Sequence (Max): " + longestIncreaseSequence);
-        System.out.println("The longest Decreasing Sequence (Min): " + longestDecreaseSequence);
+        averageValue = 1.0 * totalValue / allValues.size();
+
+        System.out.println("Maximum value: " + maxValue);
+        System.out.println("Minimum value: " + minValue);
+        System.out.println("Median value: " + medianValue);
+        System.out.println("Average value: " + averageValue);
+        System.out.println("The longest Increasing Sequence: " + longestIncreaseSequence);
+        System.out.println("The longest Decreasing Sequence: " + longestDecreaseSequence);
     }
 }
